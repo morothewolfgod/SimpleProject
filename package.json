@@ -1,0 +1,8 @@
+{
+  "name": "simple-pm",
+  "private": true,
+  "dependencies": {
+    "js.sortable": "^0.8.0",
+    "sortablejs": "^1.10.2"
+  }
+}

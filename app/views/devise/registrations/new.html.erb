@@ -1,0 +1,36 @@
+<div class="d-flex justify-content-center">
+  <div id="formContent" >
+      <h2 >
+        <span>Sign Up</span>
+      </h2>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+       <div class="field">
+          <%= f.email_field :email, placeholder: "Email", class: 'loginTxt' %>
+        </div>
+        <div class="field">
+          <% if @minimum_password_length %>
+          <em>(<%= @minimum_password_length %> characters minimum)</em>
+          <% end %><br />
+          <%= f.password_field :password, placeholder: "Password", class: 'loginTxt' %>
+        </div>
+        <br>
+        <div class="field">
+              <%= f.password_field :password_confirmation, placeholder: "Password", class: 'loginTxt' %>
+        </div>
+
+
+        <div class="actions">
+          <%= f.submit "Sign Up", class: 'btn btn-primary loginBtn'  %>
+        </div>
+      <% end %>
+
+      <div id="formFooter" class="d-flex">
+      <%= link_to 'Back', user_session_path, class: 'p-2' %>
+        <%# <%= render "devise/shared/links" %>
+      </div>
+  </div>
+</div>
+
+

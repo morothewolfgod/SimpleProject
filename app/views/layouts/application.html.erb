@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>SimplePm</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" >
+   <script type="module" src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+<% if user_signed_in? %>
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="/">Simple Project</a>
+  <form class="form-inline">
+          <%= link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'btn btn-outline-success'%>
+  </form>
+</nav>
+<% end %>
+  <body class='bg-light'>
+  <div class="container pt-5">
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+        <%= yield %>
+  </div>
+  </body>
+</html>
