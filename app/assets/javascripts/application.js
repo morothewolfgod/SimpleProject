@@ -15,4 +15,4 @@
 //= require turbolinks
 //= require_tree 
 
-import "../stylesheets/application"
+//import "../stylesheets/application"
