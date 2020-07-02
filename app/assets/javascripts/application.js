@@ -16,7 +16,3 @@
 //= require_tree 
 
 import "../stylesheets/application"
-import Sortable from 'sortablejs'
-document.addEventListener('turbolinks:load', ()=>{
-    console.log("Sortable: ", Sortable);
-})
