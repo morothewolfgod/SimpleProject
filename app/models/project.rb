@@ -1,10 +1,11 @@
 class Project < ApplicationRecord
   has_many :tasks
   belongs_to :user
+ 
 
   def badge_color
     case status
-    when'not-started'
+    when 'not-started'
       'secondary'
     when 'in-progress'
       'info'
@@ -12,6 +13,7 @@ class Project < ApplicationRecord
       'success'
     end
   end
+  
   def status
     return 'not-started' if tasks.none?
 
@@ -36,4 +38,5 @@ class Project < ApplicationRecord
   def total_tasks
    tasks.count
   end
+
 end

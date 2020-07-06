@@ -3,10 +3,14 @@
       <h2 class= "card-title d-flex justify-content-between mb-4">
       <span> <%= @project.name %> </span>
       <div>
+       <%= link_to 'Export', project_path(format: :csv), class: 'btn btn-success' %>
        <%= link_to 'Edit', edit_project_path(@project), class: 'btn btn-light' %>
         <%= link_to 'Destroy',@project, method: :delete, class: 'btn btn-dark', data: { confirm: 'Are you sure?' } %>
       </div>
     </h2>
+     <span> <%= @project.description %> </span>
+     <br/>
+      <br/>
   <div class="mb-4">
       <h6> Add Task </h6>
 
@@ -48,9 +52,12 @@
          
           <h5 class="card-title mb-2">
             <span><%= task.name %> </span>
-            
           </h5>
-          <p> <%= task.description %> </p>
+          <% if task.description == nil || task.description == "" %>
+            <p>No Description</p>
+           <% end %>
+           <p> <%= task.description %> </p>
+           
         </div>
       </div>
       <% end %>
@@ -58,32 +65,12 @@
   </div>
 </div>
 <hr>
-<%= link_to 'Back', projects_path, class: 'btn btn-secondary mb-3'%>
-
-<!--
- <h1>Listing tasks</h1>
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Status</th>
-    <th>Project</th>
-    <th></th>
-    <th></th>
-    <th></th>
-  </tr>
-
-<% @project.tasks.each do |task| %>
-<% if task.persisted? %>
-  <tr>
-    <td><%= task.name %></td>
-    <td><%= task.description %></td>
-    <td><%= task.status %></td>
-    <td><%= task.project %></td>
-    <td><%= link_to 'Show', [task.project, task] %></td>
-  </tr>
-  <% end %>
+<div class="actions d-flex">
+   <%= link_to 'Back', projects_path, class: 'btn btn-secondary mb-5 p-2'%>
+   <div class="ml-auto p-2">
+<%= form_tag import_project_tasks_path(@project) do %>
+  <%= file_field_tag :file, class: 'btn btn-primary  mb-3  ml-auto p-2'  %>
+    <%= submit_tag "Generate Tasks", class: 'btn btn-primary  mb-3  ml-auto p-2'  %>
 <% end %>
-</table>
-<br />
-<%= link_to 'New Task', new_project_task_path(@project.id) %> %>
+</div>
+</div>

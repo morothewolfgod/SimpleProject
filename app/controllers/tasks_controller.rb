@@ -8,6 +8,11 @@ class TasksController < ApplicationController
     @tasks = @project.tasks
   end
 
+  def import
+    Task.import(params[:file])
+    #BROKEN redirect not working
+    redirect_to ([@project.tasks]), notice: "Task(s) Generated Successfully"
+  end
   # GET projects/1/tasks/1
   def show
   end
@@ -60,6 +65,6 @@ class TasksController < ApplicationController
 
     # Only allow a trusted parameter "white list" through.
     def task_params
-      params.require(:task).permit(:name, :description, :status, :project_id)
+      params.require(:task).permit(:name, :description, :status, :project_id, :file)
     end
 end

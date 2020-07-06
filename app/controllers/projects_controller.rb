@@ -12,6 +12,12 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @task = @project.tasks.build
+    respond_to do |format|
+      format.html
+      format.csv{send_data @project.tasks.to_csv,
+      filename: @project.name + " Tasks.csv",
+      type: 'text/csv; charset=utf-8' }
+    end
   end
 
   # GET /projects/new
@@ -23,6 +29,9 @@ class ProjectsController < ApplicationController
   def edit
   end
 
+  def import
+    current_user.projects.import(params[:file])
+  end
   # POST /projects
   # POST /projects.json
   def create
@@ -42,12 +51,13 @@ class ProjectsController < ApplicationController
   # PATCH/PUT /projects/1
   # PATCH/PUT /projects/1.json
   def update
+
     respond_to do |format|
       if @project.update(project_params)
         format.html { redirect_to @project, notice: 'Project was successfully updated.' }
         format.json { render :show, status: :ok, location: @project }
       else
-        format.html { render :edit }
+        format.html { redirect_to @project,  notice: 'Project was not successfully updated.' }
         format.json { render json: @project.errors, status: :unprocessable_entity }
       end
     end
@@ -62,7 +72,7 @@ class ProjectsController < ApplicationController
       format.json { head :no_content }
     end
   end
-
+   
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_project
@@ -72,5 +82,5 @@ class ProjectsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def project_params
       params.require(:project).permit(:name, :description)
-    end
+    end   
 end
