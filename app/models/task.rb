@@ -14,8 +14,6 @@ class Task < ApplicationRecord
     CSV.foreach(file.path, headers: true, header_converters: :symbol) do |row|
       project.tasks.create! row.to_hash
     end
-
-    puts project.tasks.count
   end
   
 
