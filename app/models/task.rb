@@ -12,7 +12,6 @@ class Task < ApplicationRecord
 
   def self.import(file, project)
     CSV.foreach(file.path, headers: true, header_converters: :symbol) do |row|
-      puts "HEY WHAT'S THE BIG IDEA"
       project.tasks.create! row.to_hash
     end
 
