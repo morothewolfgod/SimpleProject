@@ -9,9 +9,9 @@ class TasksController < ApplicationController
   end
 
   def import
-    Task.import(params[:file])
-    #BROKEN redirect not working
-    redirect_to ([@project.tasks]), notice: "Task(s) Generated Successfully"
+    Task.import(params[:file], @project)
+    
+    redirect_to (project_path @project)
   end
   # GET projects/1/tasks/1
   def show
