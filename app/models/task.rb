@@ -10,19 +10,13 @@ class Task < ApplicationRecord
     end
   end
 
-  def self.import(file)
+  def self.import(file, project)
+    CSV.foreach(file.path, headers: true, header_converters: :symbol) do |row|
+      puts "HEY WHAT'S THE BIG IDEA"
+      project.tasks.create! row.to_hash
+    end
 
-    #PATH LOCATION OF FILE FOR ACTIVE STORAGE
-    file_path = ActiveStorage::Blob.service.send(:path_for, file.pathmap)
-
-    # @tasks = Task.project.create(name: "TEST SAVE", id: Task.project.id, desscription: "TEST SAVE")
-    #BROKEN, why is project nil? How do I get to project
-    # @tasks = self.project.create()
-    # @task.save
-    #BROKEN
-    # CSV.foreach(file_path, headers: true, header_converters: :symbol) do |row|
-      # Project.tasks.create! row.to_hash
-    # end
+    puts project.tasks.count
   end
   
 
