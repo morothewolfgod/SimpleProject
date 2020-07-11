@@ -9,8 +9,10 @@ class TasksController < ApplicationController
   end
 
   def import
-    Task.import(params[:file], @project)
     
+  if Task::FILE_VALIDATIONS[:content_types].include? (params[:file].content_type)
+      Task.import(params[:file], @project)
+  end
     redirect_to (project_path @project)
   end
   # GET projects/1/tasks/1
@@ -50,6 +52,11 @@ class TasksController < ApplicationController
   def destroy
     @task.destroy
 
+    redirect_to @project
+  end
+
+  def delete_all
+    @project.tasks.destroy_all
     redirect_to @project
   end
 
