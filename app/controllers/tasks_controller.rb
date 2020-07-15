@@ -1,7 +1,7 @@
 class TasksController < ApplicationController
   before_action :authenticate_user!
   before_action :set_project
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
+  before_action :set_task, only: %i[show edit update destroy]
 
   # GET projects/1/tasks
   def index
@@ -9,15 +9,41 @@ class TasksController < ApplicationController
   end
 
   def import
-    
-  if Task::FILE_VALIDATIONS[:content_types].include? (params[:file].content_type)
-      Task.import(params[:file], @project)
+    if !params[:file].nil?
+      if !Task::FILE_VALIDATIONS[:content_types].include? params[:file].content_type
+        flash[:alert] = "ERROR: File uploaded was not a CSV file"
+      else
+        @project.tasks.import(params[:file], @project)
+        correct_header = %w[name description status]
+        header_from_file = CSV.foreach(params[:file].path).first.map(&:downcase)
+
+        begin
+        if header_from_file != correct_header
+          flash[:alert] = "ERROR: The header information in the file needs to be Name, Description, Status"
+        else
+          CSV.foreach(params[:file].path, headers: true, row_sep: :auto, col_sep: ',', header_converters: :symbol) do |row|
+            if row[:status] == '0'
+              row[:status] = 'not-started'
+            elsif row[:status] == '1'
+              row[:status] = 'in-progress'
+            elsif row[:status] == '2'
+              row[:status] = 'complete'
+            end
+            project.tasks.create! row.to_hash
+          end
+      end
+        rescue CSV::MalformedCSVError
+          flash[:alert] = "ERROR: CSV file is not formatted correctly. Please regenerate CSV file"
+      end
+      end
+    else
+      flash[:alert] = "ERROR: No File was uploaded"
+    end
+    redirect_to(project_path(@project))
   end
-    redirect_to (project_path @project)
-  end
+
   # GET projects/1/tasks/1
-  def show
-  end
+  def show; end
 
   # GET projects/1/tasks/new
   def new
@@ -25,8 +51,7 @@ class TasksController < ApplicationController
   end
 
   # GET projects/1/tasks/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST projects/1/tasks
   def create
@@ -61,17 +86,18 @@ class TasksController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_project
-      @project = current_user.projects.find(params[:project_id])
-    end
 
-    def set_task
-      @task = @project.tasks.find(params[:id])
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_project
+    @project = current_user.projects.find(params[:project_id])
+  end
 
-    # Only allow a trusted parameter "white list" through.
-    def task_params
-      params.require(:task).permit(:name, :description, :status, :project_id, :file)
-    end
+  def set_task
+    @task = @project.tasks.find(params[:id])
+  end
+
+  # Only allow a trusted parameter "white list" through.
+  def task_params
+    params.require(:task).permit(:name, :description, :status, :project_id, :file)
+  end
 end

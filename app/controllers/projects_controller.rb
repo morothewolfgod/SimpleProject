@@ -29,9 +29,9 @@ class ProjectsController < ApplicationController
   def edit
   end
 
-  def import
-    current_user.projects.import(params[:file])
-  end
+  # def import
+  #  @import_response =  current_user.projects.import(params[:file])
+  # end
   # POST /projects
   # POST /projects.json
   def create

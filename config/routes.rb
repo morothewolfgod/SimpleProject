@@ -4,11 +4,11 @@ Rails.application.routes.draw do
     put "tasks/delete_all"=>"tasks#delete_all"
     get "tasks/delete_all"=>"tasks#delete_all"
     resources :tasks do 
-      # collection { post :import }
-      collection do
-        post :import
-        # delete :delete_all
-      end
+       collection { post :import }
+      #  collection do
+        #  post :import
+         # delete :delete_all
+      #  end
     end
   end
   devise_for :users
