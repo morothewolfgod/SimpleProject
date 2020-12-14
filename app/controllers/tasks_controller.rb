@@ -18,23 +18,25 @@ class TasksController < ApplicationController
         header_from_file = CSV.foreach(params[:file].path).first.map(&:downcase)
 
         begin
-        if header_from_file != correct_header
-          flash[:alert] = "ERROR: The header information in the file needs to be Name, Description, Status"
-        else
-          CSV.foreach(params[:file].path, headers: true, row_sep: :auto, col_sep: ',', header_converters: :symbol) do |row|
-            if row[:status] == '0'
-              row[:status] = 'not-started'
-            elsif row[:status] == '1'
-              row[:status] = 'in-progress'
-            elsif row[:status] == '2'
-              row[:status] = 'complete'
+          if header_from_file != correct_header
+            flash[:alert] = "ERROR: The header information in the file needs to be Name, Description, Status"
+          else
+            CSV.foreach(params[:file].path, headers: true, row_sep: :auto, col_sep: ',', header_converters: :symbol) do |row|
+              if row[:status] == '0'
+                row[:status] = 'not-started'
+              elsif row[:status] == '1'
+                row[:status] = 'in-progress'
+              elsif row[:status] == '2'
+                row[:status] = 'complete'
+              else
+                row[:status] = 'not-started'
+              end
+              @project.tasks.create! row.to_hash
             end
-            project.tasks.create! row.to_hash
           end
-      end
         rescue CSV::MalformedCSVError
           flash[:alert] = "ERROR: CSV file is not formatted correctly. Please regenerate CSV file"
-      end
+        end
       end
     else
       flash[:alert] = "ERROR: No File was uploaded"
