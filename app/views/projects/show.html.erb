@@ -84,17 +84,17 @@
   <%= link_to 'Back', projects_path, class: 'btn btn-secondary mb-5 p-2'%>
   <div class="ml-auto p-2">
       <% if @project.tasks.count < 1%>
-       <%= link_to 'Destroy All Tasks',  
-              project_tasks_delete_all_path(@project),
+              <%= link_to 'Destroy All Tasks',  
+              project_tasks_delete_all_path(@project.id),
               data: { confirm: 'Are you sure you want to destroy all the tasks' } , 
              class: 'btn btn-danger mb-3 p-2',
               :id => "disabled_btn" %> 
-          <% else %>  
-             <%= link_to 'Destroy All Tasks',  
-              project_tasks_delete_all_path(@project),
+      <% else %>  
+              <%= link_to 'Destroy All Tasks',  
+              project_tasks_delete_all_path(@project.id),  method: :put,
               data: { confirm: 'Are you sure you want to destroy all the tasks' } , 
              class: 'btn btn-danger mb-3 p-2'%> 
-       <% end %>
+      <% end %>
         </div>
 </div>
 </div>
