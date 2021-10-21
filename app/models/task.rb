@@ -12,29 +12,7 @@ class Task < ApplicationRecord
     ['In Progress', 'in-progress'],
     %w[Complete complete]
   ].freeze
-
-  def self.import(file, project)
-    correct_header = %w[name description status]
-    header_from_file = CSV.foreach(file.path).first.map(&:downcase)
-    
-  #   begin
-  #   if header_from_file == correct_header
-  #     CSV.foreach(file.path, headers: true, row_sep: :auto, col_sep: ',', header_converters: :symbol) do |row|
-  #       if row[:status] == '0'
-  #         row[:status] = 'not-started'
-  #       elsif row[:status] == '1'
-  #         row[:status] = 'in-progress'
-  #       elsif row[:status] == '2'
-  #         row[:status] = 'complete'
-  #       end
-  #       project.tasks.create! row.to_hash
-  #     end
-  # end
-  #   rescue CSV::MalformedCSVError => er
-  #     puts 'CSV file is not formatted correctly. Please regenerate CSV file'
-  #     return false
-  # end
-end
+  
 
   def self.to_csv
     header_attributes = %w[Name Description Status]
@@ -68,8 +46,4 @@ end
   def in_progress?
     status ==  'in-progress'
   end
-end
-
-def validate_csv_file
-  
 end
