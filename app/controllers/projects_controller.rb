@@ -1,6 +1,6 @@
 class ProjectsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_project, only: [:show, :edit, :update, :destroy]
+  before_action :project, only: [:show, :edit, :update, :destroy]
 
   # GET /projects
   # GET /projects.json
@@ -12,6 +12,9 @@ class ProjectsController < ApplicationController
   # GET /projects/1.json
   def show
     @task = @project.tasks.build
+    @current_tasks = @project.tasks.offset(pagination).limit(2)
+    
+    
     respond_to do |format|
       format.html
       format.csv{send_data @project.tasks.to_csv,
@@ -75,10 +78,17 @@ class ProjectsController < ApplicationController
    
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_project
+    def project
       @project = current_user.projects.find(params[:id])
     end
 
+    def pagination
+      if params[:pagination]== nil || params[:pagination].to_i < 0
+        @pagination = 0
+      else
+        @pagination = params[:pagination]
+      end
+    end
     # Only allow a list of trusted parameters through.
     def project_params
       params.require(:project).permit(:name, :description)
