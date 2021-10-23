@@ -12,5 +12,5 @@ status: is a string that contains the status of the task, the options for the th
 Here is the link to the app on heroku
 https://bagged-bunnyhug-93494.herokuapp.com
 
-user login: test@gmail.com \n
+user login: test@gmail.com
 Password: 123456
